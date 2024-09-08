@@ -22,45 +22,39 @@
                 <span class="bi bi-border-all"></span>
                 <span class="ml-2">Dashboard</span>
             </a>
-            <a href="/Acount/Login" class="list-group-item list-group-item-action border-0 align-items-center">
-                <span class="bi bi-box"></span>
-                <span class="ml-2">Login</span>
-                
-            </a>
-            <a href="/Acount/register" class="list-group-item list-group-item-action border-0 align-items-center">
-                <span class="bi bi-box"></span>
-               <span class="ml-2">Register</span>
-            </a>
-            <a asp-action="GetAll" asp-controller="Product" class="list-group-item list-group-item-action border-0 align-items-center">
-                <span class="bi bi-box"></span>
-                <span class="ml-2">All Product</span>
-            </a>
-            <a asp-action="AddPage" asp-controller="Product" class="list-group-item list-group-item-action border-0 align-items-center">
-                <span class="bi bi-box"></span>
-                <span class="ml-2">Add Product</span>
-            </a>
+            @if (User.Identity.Name != null)
+            {
+                <a asp-action="GetAll" asp-controller="Product" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <span class="bi bi-box"></span>
+                    <span class="ml-2">All Product</span>
+                </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="AddPage" asp-controller="Product" class="list-group-item list-group-item-action border-0 align-items-center">
+                        <span class="bi bi-box"></span>
+                        <span class="ml-2">Add Product</span>
+                    </a>
+                }
 
-            <button class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#sale-collapse">
-                <div>
-                    <span class="bi bi-cart-dash"></span>
-                    <span class="ml-2">Sale</span>
-                </div>
-                <span class="bi bi-chevron-down small"></span>
-            </button>
-            <div class="collapse" id="sale-collapse" data-parent="#sidebar">
-                <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Customers</a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Sales</a>
-                </div>
-            </div>
+                <a asp-action="AddRole" asp-controller="role" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <span class="bi bi-box"></span>
+                    <span class="ml-2">Add Role</span>
+                </a>
+                <a asp-action="logout" asp-controller="acount" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <span class="ml-2">Log Out</span>
+                </a>
+            }
+            else
+            {
+                <a asp-action="login" asp-controller="acount" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <span class="ml-2">Login</span>
 
-            <button class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#purchase-collapse">
-                <div>
-                    <span class="bi bi-cart-plus"></span>
-                    <span class="ml-2">Purchase</span>
-                </div>
-                <span class="bi bi-chevron-down small"></span>
-            </button>
+                </a>
+                <a asp-action="register" asp-controller="acount" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <span class="ml-2">Register</span>
+                </a>
+            }
+           
             <div class="collapse" id="purchase-collapse" data-parent="#sidebar">
                 <div class="list-group">
                     <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Sellers</a>
@@ -82,10 +76,6 @@
                     <span class="bi bi-person text-primary h4"></span>
                     <span class="bi bi-chevron-down ml-1 mb-2 small"></span>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right border-0 shadow-sm" aria-labelledby="logout-dropdown">
-                    <a class="dropdown-item" href="#">Logout</a>
-                    <a class="dropdown-item" href="#">Settings</a>
-                </div>
             </div>
         </nav>
 
@@ -133,4 +123,5 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </html>

@@ -11,11 +11,11 @@ namespace ModelView
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            string discription = value as string;
-            if (!(discription.Contains("\n")) && (discription.Length<200))
-            {
-                return new ValidationResult("The Dicription Is Not Enough");
-            }
+            //string discription = value as string;
+            //if (!(discription.Contains("\n")) && (discription.Length<200))
+            //{
+            //    return new ValidationResult("The Dicription Is Not Enough");
+            //}
             return ValidationResult.Success;
         }
     }

@@ -17,7 +17,7 @@ namespace ModelView
 
 
                 imagesPathes = new List<ProductAttachment>();
-                foreach (IFormFile item in productView.productAttachments)
+                foreach (IFormFile item in productView.Attachments)
                 {
                     imagesPathes.Add(new ProductAttachment { Image = item.FileName });
                 }
@@ -34,10 +34,14 @@ namespace ModelView
 
 
                 imagesPathes = new List<ProductAttachment>();
-                foreach (IFormFile item in productView.productAttachments)
+            if (productView.Attachments != null)
+            {
+                foreach (IFormFile item in productView.Attachments)
                 {
-                    imagesPathes.Add(new ProductAttachment { Image= item.FileName });
+                    imagesPathes.Add(new ProductAttachment { Image = item.FileName });
                 }
+            }
+            
             
 
             return new Product
@@ -66,7 +70,7 @@ namespace ModelView
                 Name = productView.Name,
                 Quantity = productView.Quantity,
                 Description = productView.Description,
-                productsImageList= paths
+                ProductsImageList= paths
             };
         }
         

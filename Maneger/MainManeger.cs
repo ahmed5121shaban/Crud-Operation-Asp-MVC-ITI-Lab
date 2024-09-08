@@ -73,7 +73,8 @@ namespace Maneger
         }
 
 
-        public IQueryable<T> Filter(Expression<Func<T, bool>> expression,string columnOrder = "Id",
+        public IQueryable<T> Filter(Expression<Func<T, bool>> expression, string columnOrder = "Id", int categoryID = 0,
+            double price = 0,string productName = "",
             bool IsAscending = false,int PageSize = 4, int PageNumber = 1)
         {
             IQueryable<T> query = myDBContext.Set<T>().AsQueryable();
@@ -106,7 +107,6 @@ namespace Maneger
 
             return query;
         }
-
 
 
     

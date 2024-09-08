@@ -36,14 +36,14 @@
             <input asp-for="DeleteOrNot" class="form-Check" />
         </div>
 
-        <label asp-for="productAttachments">
-            <input asp-for="productAttachments" class="form-control" multiple accept="image/*" />
-            <span asp-validation-for="productAttachments" class="text-danger"></span>
+        <label asp-for="Attachments">
+            <input asp-for="Attachments" class="form-control" multiple accept="image/*" />
+            <span asp-validation-for="Attachments" class="text-danger"></span>
         </label><br /><br />
 
 
         <div class="d-flex shadow flex-wrap my-4">
-            @foreach (string image in @pro.productsImageList)
+            @foreach (string image in @pro.ProductsImageList)
             {
                 <div class="p-4 shadow rounded-2 me-1">
                     <img src="/Images/@image" height="200px" width="200px" alt="Alternate Text" />
@@ -51,7 +51,7 @@
             }
         </div>
 
-        <input asp-for="productsImageList" type="hidden" value="@pro.productsImageList" />
+        <input asp-for="ProductsImageList" type="hidden" value="@pro.ProductsImageList" />
 
 
 

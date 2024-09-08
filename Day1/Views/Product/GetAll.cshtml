@@ -1,52 +1,106 @@
 ﻿@using ModelView;
 @using System.Collections.Generic;
+@model Pagination<Product>;
 @{
     Layout = "_UserLayout";
+    decimal pageNumbers = Math.Ceiling((decimal)Model.Total / Model.PageCount);
+    int to = Model.Total < Model.PageNum * Model.PageCount ? Model.Total : Model.PageNum * Model.PageCount;
+    int from = ((Model.PageNum - 1) * Model.PageCount) + 1;
+    bool CanMoveNext = Model.PageNum < pageNumbers;
+    bool CanMoveBack = Model.PageNum - 1 > 0;
 }
+<div><p>@from : @to ----  @Model.Total</p></div>
+
+<form class="row g-3 needs-validation" asp-action="getall" asp-controller="product" method="get" >
+  <div class="col-md-4">
+    <label for="validationCustom01" class="form-label">Product Name</label>
+        <input type="text" class="form-control" name="productName" id="validationCustom01"  >
+
+  </div>
+
+  <div class="col-md-4">
+    <label for="validationCustomUsername" class="form-label">Price</label>
+    <div class="input-group has-validation">
+      <span class="input-group-text" id="inputGroupPrepend"></span>
+            <input type="number" class="form-control" name="price" id="validationCustomUsername" aria-describedby="inputGroupPrepend">
+    </div>
+  </div>
+
+    <div class="col-12">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="true" id="invalidCheck" name="IsAscending">
+            <label class="form-check-label" for="invalidCheck">
+                Order Ascending
+            </label>
+
+        </div>
+    </div>
+
+    <input type="hidden" name="PageNumber" value="@Model.PageNum" />
+
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Filter</button>
+  </div>
+
+</form>
+
+
 
 
 <div class="container w-75 m-auto d-flex flex-wrap justify-content-evenly">
     @if (ViewData["products"]!=null) { 
         @foreach (Product item in ViewData["products"] as List<Product>)
 {
-            <div class="card col-4 me-3 mt-3 shadow rounded-2">
-                <div class="card-body">
-                    <div id="carouselExample" class="carousel slide">
-                        <div class="carousel-inner">
-                            @if (item.ProductAttachments != null)
-                            {
-                                int i = 1;
-                                @foreach (ProductAttachment image in item.ProductAttachments)
-                                {
-                                    string Active = null;
-                                    @if (i == 1)
-                                    {
-                                        Active = "active";
-                                    }
-                                    <div class="carousel-item @Active">
-                                        <img src="/Images/@image.Image" width="100px" height="200px" class="d-block w-100" alt="...">
-                                    </div>
-                                    i++;
-                                }
-                            }
-                        </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            <h5 class="card-title">Product Name : @item.Name</h5>
-                <h5 class="card-title">Product Price : @item.Price</h5>
-            <p class="card-text">@item.Description</p>
-            <a asp-action="updatepage" asp-controller="product" asp-route-id="@item.ID" class="btn btn-success">Edit</a>
-            <a asp-action="delete" asp-controller="product" asp-route-id="@item.ID" class="btn btn-danger">Delete</a>
-            <a asp-action="GetDetailsByID" asp-controller="product" asp-route-id="@item.ID" class="btn btn-primary">Show Detailes</a>
-        </div>
-    </div>
+           
+            <partial name="_productview" model="@item" />
 }
 }
+
+   
+
 </div>
+
+
+<div class="container d-flex justify-content-between">
+    @if (CanMoveBack)
+    {
+        <button type="button" class="btn btn-dark" onclick="paginate('back')">Back</button>
+    }
+
+  
+    @if (CanMoveNext)
+    {
+        <button type="button" class="btn btn-dark" onclick="paginate('next')">Next</button>
+    }
+
+</div>
+
+@section Scripts{
+    <script>
+        let form = document.getElementsByTagName("form")[0];
+
+        function paginate(val) {
+            let page = 0;
+            if (val == "back") {
+                page = @Model.PageNum - 1;
+
+            } else {
+                page = @Model.PageNum + 1;
+
+            }
+
+            form.PageNumber.value = page;
+                console.log(page);
+                console.log(@Model.PageNum)
+
+                console.log(val)
+                form.submit();
+
+        }
+
+      
+    </script>
+}
+
+
+

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Models
 {
-    public class MyDBContext : DbContext
+    public class MyDBContext : IdentityDbContext<User>
     {
         public MyDBContext(DbContextOptions dbContextOptions):base(dbContextOptions)
         {

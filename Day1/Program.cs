@@ -1,5 +1,7 @@
 
 using Maneger;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using System.Runtime.Serialization;
@@ -15,15 +17,32 @@ namespace Day1
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddSingleton<CloudinaryService>();
+
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 1004857600;
+            });
+
             //builder.Services.AddScoped();
             builder.Services.AddDbContext<MyDBContext>(i =>
             {
                 i.UseLazyLoadingProxies()
-                .UseSqlServer(builder.Configuration.GetConnectionString("connStr"));
+                .UseSqlServer(builder.Configuration.GetConnectionString("connStr"),
+                b => b.MigrationsAssembly("Day1")
+                );
             }
           );
 
+
+            builder.Services.AddIdentity<User,IdentityRole>().AddEntityFrameworkStores<MyDBContext>();
+
+            //to add configuration in identity tables
+            //builder.Services.Configure<IdentityOptions>(o=>o.User.RequireUniqueEmail=true);
+
             builder.Services.AddScoped<ProductManeger>();
+            builder.Services.AddScoped<AcountManager>();
+            builder.Services.AddScoped<ManagerRole>();
 
 
             var app = builder.Build();
@@ -36,6 +55,8 @@ namespace Day1
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

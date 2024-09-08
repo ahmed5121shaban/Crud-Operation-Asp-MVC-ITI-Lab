@@ -1,0 +1,40 @@
+﻿@model Product
+
+<div class="card col-5 me-3 mt-3 shadow rounded-2">
+    <div class="card-body">
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+                @if (Model.ProductAttachments != null)
+                {
+                    int i = 1;
+                    @foreach (ProductAttachment image in Model.ProductAttachments)
+                    {
+                        string Active = null;
+                        @if (i == 1)
+                        {
+                            Active = "active";
+                        }
+                        <div class="carousel-item @Active">
+                            <img src="/Images/@image.Image" width="100px" height="200px" class="d-block w-100" alt="...">
+                        </div>
+                        i++;
+                    }
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <h5 class="card-title">Product Name : @Model.Name</h5>
+        <h5 class="card-title">Product Price : @Model.Price</h5>
+        <p class="card-text">@Model.Description</p>
+        <a asp-action="updatepage" asp-controller="product" asp-route-id="@Model.ID" class="btn btn-success">Edit</a>
+        <a asp-action="delete" asp-controller="product" asp-route-id="@Model.ID" class="btn btn-danger">Delete</a>
+        <a asp-action="GetDetailsByID" asp-controller="product" asp-route-id="@Model.ID" class="btn btn-primary">Show Detailes</a>
+    </div>
+</div>

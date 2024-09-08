@@ -22,8 +22,8 @@ namespace ModelView
         public int CategoryID { get; set; }
 
         public bool DeleteOrNot {  get; set; } = false;
-        public IFormFileCollection productAttachments { get; set; }
-        public List<string> productsImageList { get; set; } = new List<string>();
+        public IFormFileCollection Attachments { get; set; }
+        public List<string> ProductsImageList { get; set; } = new List<string>();
 
 
     }

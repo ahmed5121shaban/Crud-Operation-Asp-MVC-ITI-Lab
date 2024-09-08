@@ -1,25 +1,39 @@
 ﻿using Maneger;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models;
 using ModelView;
+using System.Linq.Expressions;
+using System.Security.Policy;
 
 
 namespace Day1.Controllers
 {
+
     public class ProductController : Controller
     {
         ProductManeger ProductManeger;
         MyDBContext dbContext;
-        public ProductController(ProductManeger product,MyDBContext _dbContext)
+        CloudinaryService cloudinaryService;
+
+        public ProductController(ProductManeger product,MyDBContext _dbContext, CloudinaryService CloudinaryService)
         {
             this.ProductManeger = product;
             this.dbContext = _dbContext;
+            this.cloudinaryService = CloudinaryService;
         }
-        public IActionResult GetAll()
+        public IActionResult GetAll(string columnOrder = "Id", int categoryID = 0,
+            int price = 0, string productName = "",
+            bool IsAscending = false, int PageSize = 4, int PageNumber = 1)
         {
-            List<Product> products = ProductManeger.GetAll().ToList();
-            ViewData["products"] = products;
-            return View();
+            Pagination<Product> products = ProductManeger.GetAllWithFilter(columnOrderBy: columnOrder,
+                IsAscending: IsAscending, productName: productName,
+                categoryID: categoryID, price: price, PageSize: PageSize, PageNumber: PageNumber);
+
+            ViewData["products"] = products.Products;
+            return View(products);
         }
 
         public IActionResult GetDetailsByID(int id)
@@ -49,7 +63,7 @@ namespace Day1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(ProductViewModel pro)
+        public async Task<IActionResult> Update(ProductViewModel pro)
         {
             if (!ModelState.IsValid) { 
                 return View("UpdatePage", pro);
@@ -70,13 +84,14 @@ namespace Day1.Controllers
                 dbContext.SaveChanges();
 
             }
-            foreach (IFormFile item in pro.productAttachments)
+            foreach (IFormFile item in pro.Attachments)
             {
-                var data = $"{Directory.GetCurrentDirectory()}/wwwroot/Images/{item.FileName}";
-                FileStream fileStream = new FileStream(data, FileMode.Create);
-                item.CopyTo(fileStream);
-                fileStream.Close();
-                pro.productsImageList.Add(item.FileName);
+                var imageUrl = await cloudinaryService.UploadFileAsync(item);
+                //var data = $"{Directory.GetCurrentDirectory()}/wwwroot/Images/{item.FileName}";
+                //FileStream fileStream = new FileStream(data, FileMode.Create);
+                //item.CopyTo(fileStream);
+                //fileStream.Close();
+                pro.ProductsImageList.Add(imageUrl);
             }
             ProductManeger.Update(pro);
                 ViewBag.product = pro;
@@ -91,23 +106,27 @@ namespace Day1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ProductViewModel pro)
+        public  async Task<IActionResult> Add(ProductViewModel pro)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid && pro.Attachments != null)
             {
                 return View("addpage", pro); 
             }
-
-                foreach (IFormFile item in pro.productAttachments)
+            if (pro.Attachments != null)
+            {
+                foreach (IFormFile item in pro.Attachments)
                 {
-                    var data = $"{Directory.GetCurrentDirectory()}/wwwroot/Images/{item.FileName}";
-                    FileStream fileStream = new FileStream(data, FileMode.Create);
-                    item.CopyTo(fileStream);
-                    fileStream.Close();
-                    pro.productsImageList.Add(item.FileName);
+                    var imageUrl =await cloudinaryService.UploadFileAsync(item);
+                    //var data = $"{Directory.GetCurrentDirectory()}/wwwroot/Images/{item.FileName}";
+                    //FileStream fileStream = new FileStream(data, FileMode.Create);
+                    //item.CopyTo(fileStream);
+                    //fileStream.Close();
+                    pro.ProductsImageList.Add(imageUrl);
                 }
-                ProductManeger.Add(pro);
-                return RedirectToAction("getall", "product");
+            }
+            
+            ProductManeger.Add(pro);
+            return RedirectToAction("getall", "product");
 
             
         }
