@@ -1,0 +1,20 @@
+﻿@using ModelView;
+@{
+    Layout = "_UserLayout";
+    ProductViewModel pro = ViewBag.product as ProductViewModel;
+}
+
+<div class="container w-75 m-auto">
+
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">Product Name : @pro.Name</h5>
+                <h5 class="card-title">Product Price : @pro.Price</h5>
+                <p class="card-text">@pro.Description</p>
+            <a asp-action="updatepage" asp-controller="product" asp-route-id="@pro.ID" class="btn btn-success">Edit</a>
+            <a asp-action="delete" asp-controller="product" asp-route-id="@pro.ID" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+
+
+</div>
