@@ -1,0 +1,35 @@
+﻿@using ModelView;
+@model ProductViewModel;
+
+<div class="container w-100">
+    <form method="post" asp-action="add" asp-controller="product" class="w-100" enctype="multipart/form-data">
+
+        <label asp-for="Name" class="w-100">
+            <input asp-for="Name" class="form-control " placeholder="Product Name" />
+            <span asp-validation-for="Name"></span>
+        </label><br><br>
+        <label asp-for="Price" class="w-100">
+            <input asp-for="Price" class="form-control " placeholder="Product Price" />
+            <span asp-validation-for="Price"></span>
+        </label><br><br>
+        <label asp-for="Description" class="w-100">
+            <input asp-for="Description" class="form-control " placeholder="Description" />
+            <span asp-validation-for="Description"></span>
+        </label><br><br>
+        <label asp-for="Quantity" class="w-100">
+            <input asp-for="Quantity" class="form-control " placeholder="Product Quantity" />
+            <span asp-validation-for="Quantity"></span>
+        </label><br><br>
+        <label asp-for="CategoryID" class="w-100">
+            <input asp-for="CategoryID" class="form-control " placeholder="Category No" />
+            <span asp-validation-for="CategoryID"></span>
+        </label><br><br>
+
+        <label asp-for="productAttachments" class="w-100">
+            <input asp-for="productAttachments" class="form-control " placeholder="images" multiple accept="image/*" />
+            <span asp-validation-for="productAttachments" class="text-danger"></span>
+        </label><br><br>
+
+        <button type="submit" class="btn btn-outline-danger">ADD</button>
+    </form>
+</div>
