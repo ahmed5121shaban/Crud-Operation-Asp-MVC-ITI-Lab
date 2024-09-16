@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Models;
 using ModelView;
 using System;
@@ -42,7 +41,7 @@ namespace Maneger
         {
             var u = user.MapFromRegisterToUser();
             var res = await UserManager.CreateAsync(u, user.Password);
-            await UserManager.AddToRoleAsync(u, "Admin");
+            //await UserManager.AddToRoleAsync(u, "Admin");
             return res;
 
         }
@@ -50,6 +49,43 @@ namespace Maneger
         public async void LogOut() 
         {
             await SignInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> ChangePassword(UserChangePassword viewModel)
+        {
+            var User = await UserManager.FindByIdAsync(viewModel.UserID);
+
+            return await UserManager.ChangePasswordAsync(User, viewModel.CurrentPassword, viewModel.NewPassword);
+        }
+        public async Task<string> GetResetPasswordCode(string email)
+        {
+            var user = await UserManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return await UserManager.GeneratePasswordResetTokenAsync(user);
+            }
+        }
+
+        public async Task<IdentityResult> ResetPassword(UserResetPasswordViewModel viewModel)
+        {
+            var user = await UserManager.FindByEmailAsync(viewModel.Email);
+            if (user != null)
+            {
+                return await UserManager.ResetPasswordAsync
+                     (user, viewModel.Code, viewModel.NewPassword);
+            }
+            else
+            {
+                return IdentityResult.Failed(
+                    new IdentityError()
+                    {
+                        Description = "Reset Password Is valid"
+                    });
+            }
         }
 
 

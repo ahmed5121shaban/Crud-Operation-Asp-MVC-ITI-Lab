@@ -1,0 +1,41 @@
+﻿@{
+}
+
+<form asp-action="assignrole" asp-controller="role" method="post">
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">User Name</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Add</th>
+        </tr>
+    </thead>
+    <tbody>
+
+            <tr>
+                <td>
+                 <select id="roleSelect" name="id" class="form-select">
+                      @foreach (var user in ViewBag.users)
+                      {
+                         <option value="@user.Id">@user.Name</option>
+                      }
+                 </select>
+                </td>
+
+
+                <td>
+                    <select id="roleSelect" name="role" class="form-select">
+                     @foreach (var role in ViewBag.roles)
+                    {
+                       <option value="@role.Name">@role.Name</option>
+                    }
+                    </select>
+                </td>
+
+
+                <td><button class="btn btn-dark">Assign Role</button></td>
+            </tr>
+       
+    </tbody>
+</table>
+</form>

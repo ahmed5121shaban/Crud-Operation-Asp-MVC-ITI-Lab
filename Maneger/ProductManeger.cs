@@ -43,6 +43,7 @@ namespace Maneger
             {
                 builder = null;
             }
+
             var quary = base.Filter(builder, columnOrderBy, categoryID,price, productName, IsAscending, PageSize, PageNumber);
             return new Pagination<Product> { PageCount = PageSize , PageNum = PageNumber ,
                 Total = base.GetAll().Count(),
@@ -50,6 +51,9 @@ namespace Maneger
 
             };
         }
+
+
+        
 
         public void  Update(ProductViewModel pro)
         {

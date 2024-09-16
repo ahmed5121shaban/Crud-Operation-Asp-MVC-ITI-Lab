@@ -1,4 +1,5 @@
 
+using Day1.Helper;
 using Maneger;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
@@ -35,13 +36,15 @@ namespace Day1
           );
 
 
-            builder.Services.AddIdentity<User,IdentityRole>().AddEntityFrameworkStores<MyDBContext>();
+            builder.Services.AddIdentity<User,IdentityRole>().AddEntityFrameworkStores<MyDBContext>()
+                .AddDefaultTokenProviders();
 
             //to add configuration in identity tables
-            //builder.Services.Configure<IdentityOptions>(o=>o.User.RequireUniqueEmail=true);
-
+            builder.Services.Configure<IdentityOptions>(o => o.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider);
+            builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>,Claims>();
             builder.Services.AddScoped<ProductManeger>();
             builder.Services.AddScoped<AcountManager>();
+            builder.Services.AddScoped<CartManager>();
             builder.Services.AddScoped<ManagerRole>();
 
 

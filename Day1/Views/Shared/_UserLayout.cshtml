@@ -33,6 +33,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="acount" asp-action="LogOut">LogOut</a>
                             </li>
+                            @if(User.IsInRole("User")){
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="cart" asp-action="addtocartpage">Cart</a>
+                                </li>
+                            }
+                            
                         }
                         else
                         {

@@ -1,11 +1,11 @@
 ﻿using Maneger;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models;
 using ModelView;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Security.Policy;
 
 
@@ -18,11 +18,13 @@ namespace Day1.Controllers
         MyDBContext dbContext;
         CloudinaryService cloudinaryService;
 
-        public ProductController(ProductManeger product,MyDBContext _dbContext, CloudinaryService CloudinaryService)
+        public ProductController(ProductManeger product,
+            MyDBContext _dbContext, CloudinaryService CloudinaryService)
         {
             this.ProductManeger = product;
             this.dbContext = _dbContext;
             this.cloudinaryService = CloudinaryService;
+
         }
         public IActionResult GetAll(string columnOrder = "Id", int categoryID = 0,
             int price = 0, string productName = "",
@@ -43,6 +45,8 @@ namespace Day1.Controllers
             return View();
         }
 
+
+        [TraceProductDeleted]
         public IActionResult Delete(int id)
         {
             var product = ProductManeger.GetAll().FirstOrDefault(i => i.ID == id);
@@ -117,10 +121,6 @@ namespace Day1.Controllers
                 foreach (IFormFile item in pro.Attachments)
                 {
                     var imageUrl =await cloudinaryService.UploadFileAsync(item);
-                    //var data = $"{Directory.GetCurrentDirectory()}/wwwroot/Images/{item.FileName}";
-                    //FileStream fileStream = new FileStream(data, FileMode.Create);
-                    //item.CopyTo(fileStream);
-                    //fileStream.Close();
                     pro.ProductsImageList.Add(imageUrl);
                 }
             }
@@ -135,5 +135,10 @@ namespace Day1.Controllers
 
             return View();
         }
+
+
+
+
+        
     }
 }

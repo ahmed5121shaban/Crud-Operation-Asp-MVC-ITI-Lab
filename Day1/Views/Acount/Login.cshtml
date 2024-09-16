@@ -16,14 +16,18 @@
         <span asp-validation-for="Password"></span>
     </div>
 
+        <div class="col-md-6">
+            <label asp-for="RemeberMe" class="form-label">Remeber Me</label>
+            <input asp-for="RemeberMe" class="form-check">
+        </div>
 
-    <div class="col-md-6">
-        <label asp-for="RemeberMe" class="form-label">Remeber Me</label>
-        <input asp-for="RemeberMe" class="form-check">
+    
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>
+        <a asp-action="GetResetPasswordCode" asp-controller="acount">Reset Password</a>
     </div>
 
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary">Sign in</button>
-    </div>
 </form>
 

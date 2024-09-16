@@ -36,5 +36,6 @@
         <a asp-action="updatepage" asp-controller="product" asp-route-id="@Model.ID" class="btn btn-success">Edit</a>
         <a asp-action="delete" asp-controller="product" asp-route-id="@Model.ID" class="btn btn-danger">Delete</a>
         <a asp-action="GetDetailsByID" asp-controller="product" asp-route-id="@Model.ID" class="btn btn-primary">Show Detailes</a>
+        <a asp-action="AddToCart" asp-controller="cart" asp-route-id="@Model.ID" class="btn btn-danger">Add To Cart</a>
     </div>
 </div>

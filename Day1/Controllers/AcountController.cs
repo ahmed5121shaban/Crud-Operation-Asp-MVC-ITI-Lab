@@ -1,6 +1,9 @@
-﻿using Maneger;
+﻿using Day1.Helper;
+using Maneger;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelView;
+using System.Security.Claims;
 
 namespace Day1.Controllers
 {
@@ -66,6 +69,85 @@ namespace Day1.Controllers
         {
             AcountManager.LogOut();
             return RedirectToAction("index", "home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(UserChangePassword viewmodel)
+        {
+            if (ModelState.IsValid)
+            {
+                viewmodel.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var res = await AcountManager.ChangePassword(viewmodel);
+                if (res.Succeeded)
+                {
+                    return RedirectToAction("login");
+                }
+                else
+                {
+                    foreach (var item in res.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+                    return View(viewmodel);
+                }
+            }
+            return View(viewmodel);
+
+        }
+
+
+
+
+        [HttpGet]
+        public IActionResult GetResetPasswordCode()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string email)
+        {
+            var code = await AcountManager.GetResetPasswordCode(email);
+            if (string.IsNullOrEmpty(code))
+            {
+                ModelState.AddModelError("", "Your Email Is Not Here");
+                return View("GetResetPasswordCode");
+            }
+            else
+            {
+                EmailHelper mail = new EmailHelper
+                    (email, "Your Code is" , $" Code :  {code}");
+                mail.Send();
+                return View( new UserResetPasswordViewModel() { Email = email });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(UserResetPasswordViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await AcountManager.ResetPassword(viewModel);
+                if (res.Succeeded)
+                {
+                    return RedirectToAction("login","Acount");
+                }
+                else
+                {
+                    foreach (var item in res.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+                }
+            }
+            return View(viewModel);
         }
     }
 }

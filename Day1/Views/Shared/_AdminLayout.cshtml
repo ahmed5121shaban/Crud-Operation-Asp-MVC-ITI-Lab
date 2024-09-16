@@ -28,18 +28,19 @@
                     <span class="bi bi-box"></span>
                     <span class="ml-2">All Product</span>
                 </a>
-                @if (User.IsInRole("Admin"))
-                {
                     <a asp-action="AddPage" asp-controller="Product" class="list-group-item list-group-item-action border-0 align-items-center">
                         <span class="bi bi-box"></span>
                         <span class="ml-2">Add Product</span>
                     </a>
-                }
 
-                <a asp-action="AddRole" asp-controller="role" class="list-group-item list-group-item-action border-0 align-items-center">
-                    <span class="bi bi-box"></span>
-                    <span class="ml-2">Add Role</span>
-                </a>
+                    <a asp-action = "AssignRole" asp-controller="role" class="list-group-item list-group-item-action border-0 align-items-center">
+                        <span class="bi bi-box"></span>
+                        <span class="ml-2">Assign Role</span>
+                    </a>
+                    <a asp-action="AddRole" asp-controller="role" class="list-group-item list-group-item-action border-0 align-items-center">
+                        <span class="bi bi-box"></span>
+                        <span class="ml-2">Add Role</span>
+                    </a>
                 <a asp-action="logout" asp-controller="acount" class="list-group-item list-group-item-action border-0 align-items-center">
                     <span class="ml-2">Log Out</span>
                 </a>
