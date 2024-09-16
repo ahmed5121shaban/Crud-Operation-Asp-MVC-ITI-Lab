@@ -21,6 +21,7 @@ namespace Maneger
             {
                 item.SupPrice += productView.Price;
                 item.Quantity += productView.Quantity;
+                base.Update(item);
             }
             else
             {
